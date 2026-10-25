@@ -1,0 +1,123 @@
+
+[
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/346-iron-man.jpg",
+    "nombre": "Iron Man",
+    "identidad": "Tony Stark",
+    "descripcion": "Genio, inventor y millonario que utiliza una armadura tecnológica para combatir el crimen."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/620-spider-man.jpg",
+    "nombre": "Spider-Man",
+    "identidad": "Peter Parker",
+    "descripcion": "Héroe con fuerza, agilidad y sentido arácnido que protege Nueva York."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/149-captain-america.jpg",
+    "nombre": "Capitán América",
+    "identidad": "Steve Rogers",
+    "descripcion": "Súper soldado que representa el valor, la justicia y el liderazgo."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/659-thor.jpg",
+    "nombre": "Thor",
+    "identidad": "Thor Odinson",
+    "descripcion": "Dios del trueno que combate amenazas con sus poderes y su martillo."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/332-hulk.jpg",
+    "nombre": "Hulk",
+    "identidad": "Bruce Banner",
+    "descripcion": "Científico que se transforma en un ser de enorme fuerza cuando se enfurece."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/107-black-widow.jpg",
+    "nombre": "Black Widow",
+    "identidad": "Natasha Romanoff",
+    "descripcion": "Espía experta en combate, infiltración e inteligencia."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/106-black-panther.jpg",
+    "nombre": "Black Panther",
+    "identidad": "T'Challa",
+    "descripcion": "Rey de Wakanda y protector de su pueblo mediante tecnología avanzada."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/226-doctor-strange.jpg",
+    "nombre": "Doctor Strange",
+    "identidad": "Stephen Strange",
+    "descripcion": "Hechicero que protege la realidad mediante conocimientos místicos."
+  },
+  {
+    "imagen": "lib/assets/images/capitana_marvel.webp",
+    "nombre": "Capitana Marvel",
+    "identidad": "Carol Danvers",
+    "descripcion": "Heroína con gran fuerza y capacidad para proyectar energía cósmica."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/30-ant-man.jpg",
+    "nombre": "Ant-Man",
+    "identidad": "Scott Lang",
+    "descripcion": "Héroe que puede cambiar de tamaño gracias a una tecnología especial."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/70-batman.jpg",
+    "nombre": "Batman",
+    "identidad": "Bruce Wayne",
+    "descripcion": "Detective y estratega que protege Gotham usando entrenamiento y tecnología."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/644-superman.jpg",
+    "nombre": "Superman",
+    "identidad": "Clark Kent",
+    "descripcion": "Héroe de Krypton conocido por su fuerza, vuelo y visión de calor."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/720-wonder-woman.jpg",
+    "nombre": "Wonder Woman",
+    "identidad": "Diana Prince",
+    "descripcion": "Princesa amazona que lucha por la paz y la justicia."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/263-flash.jpg",
+    "nombre": "Flash",
+    "identidad": "Barry Allen",
+    "descripcion": "Velocista capaz de desplazarse a velocidades extraordinarias."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/38-aquaman.jpg",
+    "nombre": "Aquaman",
+    "identidad": "Arthur Curry",
+    "descripcion": "Rey de Atlantis con habilidades acuáticas y gran fuerza."
+  },
+  {
+    "imagen": "lib/assets/images/linterna_verde.webp",
+    "nombre": "Linterna Verde",
+    "identidad": "Hal Jordan",
+    "descripcion": "Protector espacial que crea construcciones de energía con su anillo."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/194-cyborg.jpg",
+    "nombre": "Cyborg",
+    "identidad": "Victor Stone",
+    "descripcion": "Héroe con un cuerpo cibernético integrado con tecnología avanzada."
+  },
+  {
+    "imagen": "lib/assets/images/803592.webp",
+    "nombre": "Shazam",
+    "identidad": "Billy Batson",
+    "descripcion": "Joven que obtiene poderes mágicos al pronunciar una palabra especial."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/298-green-arrow.jpg",
+    "nombre": "Green Arrow",
+    "identidad": "Oliver Queen",
+    "descripcion": "Arquero experto que combate el crimen con precisión y estrategia."
+  },
+  {
+    "imagen": "https://cdn.jsdelivr.net/gh/akabab/superhero-api@0.3.0/api/images/md/644-superman.jpg",
+    "nombre": "Supergirl",
+    "identidad": "Kara Zor-El",
+    "descripcion": "Heroína kryptoniana que utiliza sus poderes para ayudar a los demás."
+  }
+]

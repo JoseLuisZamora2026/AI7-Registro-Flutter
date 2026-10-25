@@ -1,4 +1,6 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -13,7 +15,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Registro de usuario',
+      title: 'Universo de Superhéroes',
       theme: ThemeData(
         useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
@@ -21,306 +23,239 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF3F5FA),
       ),
-      home: const Registro(),
+      home: const SuperheroesPage(),
     );
   }
 }
 
-class Registro extends StatefulWidget {
-  const Registro({super.key});
+class Superheroe {
+  final String imagen;
+  final String nombre;
+  final String identidad;
+  final String descripcion;
 
-  @override
-  State<Registro> createState() => _RegistroState();
-}
+  const Superheroe({
+    required this.imagen,
+    required this.nombre,
+    required this.identidad,
+    required this.descripcion,
+  });
 
-class _RegistroState extends State<Registro> {
-  final _formKey = GlobalKey<FormState>();
-
-  final nombre = TextEditingController();
-  final paterno = TextEditingController();
-  final materno = TextEditingController();
-  final correo = TextEditingController();
-  final telefono = TextEditingController();
-  final password = TextEditingController();
-  final confirmar = TextEditingController();
-
-  bool ocultarPassword = true;
-  bool ocultarConfirmacion = true;
-
-  @override
-  void dispose() {
-    nombre.dispose();
-    paterno.dispose();
-    materno.dispose();
-    correo.dispose();
-    telefono.dispose();
-    password.dispose();
-    confirmar.dispose();
-    super.dispose();
-  }
-
-  String? validarNombre(String? valor) {
-    if (valor == null || valor.trim().isEmpty) {
-      return 'Este campo es obligatorio';
-    }
-
-    if (!RegExp(r'^[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]+$')
-        .hasMatch(valor.trim())) {
-      return 'Escribe solo letras';
-    }
-
-    return null;
-  }
-
-  String? validarCorreo(String? valor) {
-    if (valor == null || valor.trim().isEmpty) {
-      return 'Ingresa tu correo electrónico';
-    }
-
-    if (!RegExp(r'^[^@\s]+@[^@\s]+\.[^@\s]+$')
-        .hasMatch(valor.trim())) {
-      return 'El correo no es válido';
-    }
-
-    return null;
-  }
-
-  String? validarTelefono(String? valor) {
-    if (valor == null || valor.isEmpty) {
-      return 'Ingresa tu número celular';
-    }
-
-    if (valor.length != 10) {
-      return 'El teléfono debe tener 10 dígitos';
-    }
-
-    return null;
-  }
-
-  String? validarPassword(String? valor) {
-    if (valor == null || valor.isEmpty) {
-      return 'Ingresa una contraseña';
-    }
-
-    if (valor.length < 8) {
-      return 'Usa al menos 8 caracteres';
-    }
-
-    return null;
-  }
-
-  Widget crearCampo(
-    String etiqueta,
-    TextEditingController controlador, {
-    TextInputType tipo = TextInputType.text,
-    String? Function(String?)? validar,
-    List<TextInputFormatter>? filtros,
-    bool oculto = false,
-    Widget? icono,
-  }) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: TextFormField(
-        controller: controlador,
-        keyboardType: tipo,
-        obscureText: oculto,
-        validator: validar,
-        inputFormatters: filtros,
-        decoration: InputDecoration(
-          labelText: etiqueta,
-          filled: true,
-          fillColor: Colors.white,
-          suffixIcon: icono,
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 16,
-            vertical: 16,
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-        ),
-      ),
+  factory Superheroe.fromJson(Map<String, dynamic> json) {
+    return Superheroe(
+      imagen: json['imagen'] as String,
+      nombre: json['nombre'] as String,
+      identidad: json['identidad'] as String,
+      descripcion: json['descripcion'] as String,
     );
   }
+}
 
-  void registrar() {
-    if (_formKey.currentState!.validate()) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Registro validado correctamente'),
-        ),
+class SuperheroesPage extends StatefulWidget {
+  const SuperheroesPage({super.key});
+
+  @override
+  State<SuperheroesPage> createState() => _SuperheroesPageState();
+}
+
+class _SuperheroesPageState extends State<SuperheroesPage> {
+  late Future<List<Superheroe>> superheroesFuture;
+  String busqueda = '';
+
+  @override
+  void initState() {
+    super.initState();
+    superheroesFuture = cargarSuperheroes();
+  }
+
+  Future<List<Superheroe>> cargarSuperheroes() async {
+    final contenido = await rootBundle.loadString('lib/superheroes.json');
+    final List<dynamic> datos = jsonDecode(contenido) as List<dynamic>;
+
+    return datos
+        .map(
+          (elemento) => Superheroe.fromJson(
+            elemento as Map<String, dynamic>,
+          ),
+        )
+        .toList();
+  }
+
+  Widget construirImagen(Superheroe heroe) {
+    final esLocal = heroe.imagen.startsWith('lib/assets/');
+
+    if (esLocal) {
+      return Image.asset(
+        heroe.imagen,
+        width: double.infinity,
+        height: 220,
+        fit: BoxFit.contain,
+        errorBuilder: (context, error, stackTrace) {
+          debugPrint('Error al cargar imagen local: ${heroe.imagen}');
+          debugPrint('$error');
+          return imagenNoDisponible();
+        },
       );
     }
+
+    return Image.network(
+      heroe.imagen,
+      width: double.infinity,
+      height: 220,
+      fit: BoxFit.contain,
+      errorBuilder: (context, error, stackTrace) {
+        debugPrint('Error al cargar imagen de red: ${heroe.imagen}');
+        debugPrint('$error');
+        return imagenNoDisponible();
+      },
+    );
   }
 
-  void limpiar() {
-    _formKey.currentState!.reset();
-
-    nombre.clear();
-    paterno.clear();
-    materno.clear();
-    correo.clear();
-    telefono.clear();
-    password.clear();
-    confirmar.clear();
+  Widget imagenNoDisponible() {
+    return Container(
+      height: 220,
+      width: double.infinity,
+      color: Colors.indigo.shade50,
+      child: const Icon(
+        Icons.broken_image,
+        size: 90,
+        color: Colors.indigo,
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registro de usuario'),
+        title: const Text('Universo de Superhéroes'),
         centerTitle: true,
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: Form(
-        key: _formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(20),
-          children: [
-            const CircleAvatar(
-              radius: 45,
-              backgroundColor: Colors.indigo,
-              child: Icon(
-                Icons.person,
-                size: 52,
-                color: Colors.white,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Crear cuenta',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 25,
-                fontWeight: FontWeight.bold,
-                color: Colors.indigo,
-              ),
-            ),
-            const SizedBox(height: 6),
-            const Text(
-              'Completa tus datos para registrarte',
-              textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.black54),
-            ),
-            const SizedBox(height: 24),
+      body: FutureBuilder<List<Superheroe>>(
+        future: superheroesFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
 
-            crearCampo(
-              'Nombre',
-              nombre,
-              validar: validarNombre,
-              filtros: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]'),
+          if (snapshot.hasError) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Text(
+                  'No se pudo cargar el JSON.\n${snapshot.error}',
+                  textAlign: TextAlign.center,
                 ),
-              ],
-            ),
-            crearCampo(
-              'Apellido paterno',
-              paterno,
-              validar: validarNombre,
-              filtros: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]'),
-                ),
-              ],
-            ),
-            crearCampo(
-              'Apellido materno',
-              materno,
-              validar: validarNombre,
-              filtros: [
-                FilteringTextInputFormatter.allow(
-                  RegExp(r'[a-zA-ZáéíóúÁÉÍÓÚñÑüÜ ]'),
-                ),
-              ],
-            ),
-            crearCampo(
-              'Correo electrónico',
-              correo,
-              tipo: TextInputType.emailAddress,
-              validar: validarCorreo,
-            ),
-            crearCampo(
-              'Teléfono celular',
-              telefono,
-              tipo: TextInputType.phone,
-              validar: validarTelefono,
-              filtros: [
-                FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(10),
-              ],
-            ),
-            crearCampo(
-              'Contraseña',
-              password,
-              oculto: ocultarPassword,
-              validar: validarPassword,
-              icono: IconButton(
-                icon: Icon(
-                  ocultarPassword
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    ocultarPassword = !ocultarPassword;
-                  });
-                },
               ),
-            ),
-            crearCampo(
-              'Confirmar contraseña',
-              confirmar,
-              oculto: ocultarConfirmacion,
-              validar: (valor) {
-                if (valor == null || valor.isEmpty) {
-                  return 'Confirma tu contraseña';
-                }
+            );
+          }
 
-                if (valor != password.text) {
-                  return 'Las contraseñas no coinciden';
-                }
+          final superheroes = snapshot.data ?? [];
 
-                return null;
-              },
-              icono: IconButton(
-                icon: Icon(
-                  ocultarConfirmacion
-                      ? Icons.visibility
-                      : Icons.visibility_off,
-                ),
-                onPressed: () {
-                  setState(() {
-                    ocultarConfirmacion = !ocultarConfirmacion;
-                  });
-                },
-              ),
-            ),
+          final filtrados = superheroes.where((heroe) {
+            final texto = busqueda.toLowerCase();
 
-            const SizedBox(height: 8),
-            SizedBox(
-              height: 50,
-              child: ElevatedButton(
-                onPressed: registrar,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.indigo,
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+            return heroe.nombre.toLowerCase().contains(texto) ||
+                heroe.identidad.toLowerCase().contains(texto);
+          }).toList();
+
+          return Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(16),
+                child: TextField(
+                  onChanged: (valor) {
+                    setState(() {
+                      busqueda = valor;
+                    });
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Buscar superhéroe o identidad...',
+                    prefixIcon: const Icon(Icons.search),
+                    filled: true,
+                    fillColor: Colors.white,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
                 ),
-                child: const Text('Registrarme'),
               ),
-            ),
-            const SizedBox(height: 10),
-            OutlinedButton(
-              onPressed: limpiar,
-              child: const Text('Limpiar formulario'),
-            ),
-          ],
-        ),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 12),
+                child: Text(
+                  '${filtrados.length} de ${superheroes.length} superhéroes',
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    color: Colors.indigo,
+                  ),
+                ),
+              ),
+              Expanded(
+                child: filtrados.isEmpty
+                    ? const Center(
+                        child: Text('No se encontraron personajes.'),
+                      )
+                    : ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        itemCount: filtrados.length,
+                        itemBuilder: (context, index) {
+                          final heroe = filtrados[index];
+
+                          return Card(
+                            margin: const EdgeInsets.only(bottom: 16),
+                            clipBehavior: Clip.antiAlias,
+                            elevation: 3,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(
+                                  height: 220,
+                                  width: double.infinity,
+                                  child: construirImagen(heroe),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(16),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        heroe.nombre,
+                                        style: const TextStyle(
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        'Identidad secreta: ${heroe.identidad}',
+                                        style: const TextStyle(
+                                          fontSize: 16,
+                                          color: Colors.indigo,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      Text(
+                                        heroe.descripcion,
+                                        style: const TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
