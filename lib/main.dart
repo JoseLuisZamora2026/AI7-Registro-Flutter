@@ -23,11 +23,82 @@ class MyApp extends StatelessWidget {
         ),
         scaffoldBackgroundColor: const Color(0xFFF3F5FA),
       ),
-      home: const SuperheroesPage(),
+      home: const SplashScreen(),
     );
   }
 }
 
+// PANTALLA DE INICIO
+class SplashScreen extends StatefulWidget {
+  const SplashScreen({super.key});
+
+  @override
+  State<SplashScreen> createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return;
+
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const SuperheroesPage(),
+        ),
+      );
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.indigo,
+      body: Center(
+        child: Padding(
+          padding: const EdgeInsets.all(24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.flash_on,
+                size: 100,
+                color: Colors.white,
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'UNIVERSO DE SUPERHÉROES',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 12),
+              const Text(
+                '¡Descubre a tus héroes favoritos!',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: 16,
+                ),
+              ),
+              const SizedBox(height: 32),
+              const CircularProgressIndicator(
+                color: Colors.white,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// MODELO DE DATOS
 class Superheroe {
   final String imagen;
   final String nombre;
@@ -51,6 +122,7 @@ class Superheroe {
   }
 }
 
+// PANTALLA PRINCIPAL
 class SuperheroesPage extends StatefulWidget {
   const SuperheroesPage({super.key});
 
