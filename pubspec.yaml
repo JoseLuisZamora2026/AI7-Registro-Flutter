@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
+  just_audio: ^0.10.6
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +24,6 @@ flutter:
   assets:
     - lib/superheroes.json
     - lib/assets/images/
+    - lib/assets/musica_superheroes.mp3
+
+

@@ -3,9 +3,16 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'musica_player.dart';
 
+//PARTE MODIFICADA PARA FUNCIONAMIENTO DE LA MUSICA DE FONDO DE LA APLICACIÓN
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
+
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    MusicaPlayer.iniciar();
+  });
 }
 
 class MyApp extends StatelessWidget {
