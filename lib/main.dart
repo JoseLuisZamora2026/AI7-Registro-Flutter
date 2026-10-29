@@ -278,8 +278,14 @@ class _SuperheroesPageState extends State<SuperheroesPage> {
                     ? const Center(
                         child: Text('No se encontraron personajes.'),
                       )
-                    : ListView.builder(
+                     : GridView.builder(
                         padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                        gridDelegate:
+                        SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: MediaQuery.of(context).orientation==Orientation.portrait ? 1: 2,
+                        crossAxisSpacing: 12,
+                        mainAxisSpacing: 12,
+                        mainAxisExtent: 500,
+                        ),
                         itemCount: filtrados.length,
                         itemBuilder: (context, index) {
                           final heroe = filtrados[index];
